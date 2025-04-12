@@ -1,22 +1,41 @@
 <?php
 session_start();
+include './koneksi.php';
+include './partials/query.php';
 $admin_user = $_SESSION['admin_username'];
 
 if(!isset($admin_user)){
    header('location:login.php');
 }
 
-include './koneksi.php';
-include './partials/query.php';
-if(isset($_GET['ibook'])) {
+if (isset($_GET['ibook'])) {
     $id = $_GET["ibook"];
-    $queryMb = "DELETE FROM books WHERE id_book = $id";
-    delete($queryMb);
 
-     // reaksi setelah berhasil delete
-  header('Location: daftar_buku.php');
-  exit;
+    // Query delete
+    $queryMb = "DELETE FROM books WHERE id_book = $id";
+
+    if (mysqli_query($con, $queryMb)) {
+        header('Location: daftar_buku.php');
+        exit;
+    } else {
+        $error = mysqli_error($con);
+        
+        if (strpos($error, 'foreign key constraint fails') !== false) {
+            echo "<script>
+                alert('Buku sedang dimasukkan ke keranjang users, tidak bisa dihapus.');
+                window.location.href='daftar_buku.php';
+            </script>";
+        } else {
+            echo "<script>
+                alert('Gagal menghapus data: " . addslashes($error) . "');
+                window.location.href='daftar_buku.php';
+            </script>";
+        }
+    }
+
+    mysqli_close($con);
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

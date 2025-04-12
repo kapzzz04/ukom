@@ -17,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $metode = $_POST['metode'];
     $pembayaran = $_POST['nomorPembayaran'];
 
+    $full_alamat = $alamat . ', ' . $kota . ', ' . $kode_pos;
+
     // Cek apakah ketiganya terisi
     if (!empty($alamat) && !empty($kota) && !empty($kode_pos)) {
         // Escape input untuk keamanan
@@ -59,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Simpan ke tabel orders
-    $insert_order = "INSERT INTO orders (user_id, total_price, status, created_at, nama_penerima, metode_pembayaran, nomor_pembayaran, bukti_pembayaran)
-                     VALUES ($user_id, $total_price, 'pending', NOW(), '$nama', '$metode', '$pembayaran', '$gambar')";
+    $insert_order = "INSERT INTO orders (user_id, total_price, status, created_at, nama_penerima, metode_pembayaran, nomor_pembayaran, bukti_pembayaran, alamat)
+                     VALUES ($user_id, $total_price, 'pending', NOW(), '$nama', '$metode', '$pembayaran', '$gambar', '$full_alamat')";
     mysqli_query($con, $insert_order);
     $order_id = mysqli_insert_id($con);
 
