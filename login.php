@@ -20,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['email_user']  = $user['email'];
             $_SESSION['alamat_user'] = $user['alamat'];
             $_SESSION['user_id']     = $user['id'];
+            $_SESSION['role']     = $user['role'];
+
 
             echo '<script>alert("Login Sukses!"); window.location="./index.php";</script>';
         } else {
